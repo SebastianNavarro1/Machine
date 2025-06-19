@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Predicción Iris</title>
+</head>
+<body>
+    <h2>Formulario - Clasificación Flor Iris</h2>
+    <form id="formulario">
+        <label>Sepal Length:</label>
+        <input type="number" step="any" name="v1" required><br><br>
+
+        <label>Sepal Width:</label>
+        <input type="number" step="any" name="v2" required><br><br>
+
+        <label>Petal Length:</label>
+        <input type="number" step="any" name="v3" required><br><br>
+
+        <label>Petal Width:</label>
+        <input type="number" step="any" name="v4" required><br><br>
+
+        <button type="submit">Predecir</button>
+    </form>
+
+    <h3 id="resultado"></h3>
+    <h4 id="nombre"></h4>
+
+    <script>
+        const form = document.getElementById("formulario");
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault(); // evitar recargar la página
+
+            const data = {
+                valores: [
+                    parseFloat(form.v1.value),
+                    parseFloat(form.v2.value),
+                    parseFloat(form.v3.value),
+                    parseFloat(form.v4.value)
+                ]
+            };
+
+            const response = await fetch("/predict", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            document.getElementById("resultado").innerText = "Clase predicha: " + result.clase_predicha;
+            document.getElementById("nombre").innerText = "Nombre de la clase: " + result.nombre_clase;
+        });
+    </script>
+</body>
+</html>
